@@ -12,3 +12,4 @@ C:\Users\91942\Desktop\InvoiceManagementSystem\InvoiceManagementSystem.DAL\obj\D
 C:\Users\91942\Desktop\InvoiceManagementSystem\InvoiceManagementSystem.DAL\obj\Debug\net8.0\InvoiceManagementSystem.DAL.pdb
 C:\Users\91942\Desktop\InvoiceManagementSystem\InvoiceManagementSystem.DAL\obj\Debug\net8.0\InvoiceManagementSystem.DAL.genruntimeconfig.cache
 C:\Users\91942\Desktop\InvoiceManagementSystem\InvoiceManagementSystem.DAL\obj\Debug\net8.0\ref\InvoiceManagementSystem.DAL.dll
+C:\Users\91942\Desktop\InvoiceManagementSystem\InvoiceManagementSystem.DAL\obj\Debug\net8.0\InvoiceManagementSystem.DAL.sourcelink.json

@@ -132,3 +132,4 @@ C:\Users\91942\Desktop\InvoiceManagementSystem\InvoiceManagementSystem.Console\b
 C:\Users\91942\Desktop\InvoiceManagementSystem\InvoiceManagementSystem.Console\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\91942\Desktop\InvoiceManagementSystem\InvoiceManagementSystem.Console\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\91942\Desktop\InvoiceManagementSystem\InvoiceManagementSystem.Console\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\91942\Desktop\InvoiceManagementSystem\InvoiceManagementSystem.Console\obj\Debug\net8.0\InvoiceManagementSystem.Console.sourcelink.json

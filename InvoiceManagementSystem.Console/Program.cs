@@ -121,21 +121,28 @@ services.AddDbContext<ApplicationDbContext>(options =>
 
 services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 services.AddScoped<IInvoiceService, InvoiceService>();
+services.AddScoped<ICustomerRepository, CustomerRepository>();
 
 var serviceProvider = services.BuildServiceProvider();
 var invoiceService = serviceProvider.GetRequiredService<IInvoiceService>();
+var customerRepository = serviceProvider.GetRequiredService<ICustomerRepository>();
 
 while (true)
 {
     Console.WriteLine("\n===== INVOICE MANAGEMENT SYSTEM =====");
-    Console.WriteLine("1. Create Invoice");
-    Console.WriteLine("2. View All Invoices");
-    Console.WriteLine("3. Add Payment");
-    Console.WriteLine("4. Change Invoice Status");
-    Console.WriteLine("5. Aging Report");
-Console.WriteLine("6. Update Overdue Invoices");
-Console.WriteLine("7. Calculate DSO");
-Console.WriteLine("8. Exit");
+   Console.WriteLine("1. Create Customer");
+Console.WriteLine("2. Create Invoice");
+Console.WriteLine("3. View All Invoices");
+Console.WriteLine("4. Add Payment");
+Console.WriteLine("5. Change Invoice Status");
+Console.WriteLine("6. Aging Report");
+Console.WriteLine("7. Update Overdue Invoices");
+Console.WriteLine("8. Calculate DSO");
+Console.WriteLine("9. Revenue Summary Report");
+Console.WriteLine("10. Outstanding Per Customer");
+Console.WriteLine("11. Reconciliation Report");
+Console.WriteLine("12. Top 5 Unpaid Invoices");
+Console.WriteLine("13. Exit");
     Console.Write("Select Option: ");
 
 
@@ -143,35 +150,55 @@ Console.WriteLine("8. Exit");
 
     switch (choice)
     {
-        case "1":
-            await CreateInvoice(invoiceService);
-            break;
 
+        case "1":
+    await CreateCustomer(customerRepository);
+    break;
         case "2":
-            await ViewInvoices(invoiceService);
+            await CreateInvoice(invoiceService, customerRepository);
             break;
 
         case "3":
-            await AddPayment(invoiceService);
+            await ViewInvoices(invoiceService);
             break;
 
         case "4":
-            await ChangeStatus(invoiceService);
+            await AddPayment(invoiceService);
             break;
 
         case "5":
+            await ChangeStatus(invoiceService);
+            break;
+
+        case "6":
     await invoiceService.GenerateAgingReportAsync();
     break;
 
-case "6":
+case "7":
     await invoiceService.UpdateOverdueInvoicesAsync();
     break;
 
-case "7":
+case "8":
     await invoiceService.CalculateDsoAsync();
     break;
 
-case "8":
+case "9":
+    await invoiceService.GenerateRevenueSummaryAsync();
+    break;
+
+case "10":
+    await invoiceService.GenerateCustomerOutstandingReportAsync();
+    break;
+
+case "11":
+    await invoiceService.GenerateReconciliationReportAsync();
+    break;
+
+case "12":
+    await invoiceService.GenerateTopUnpaidInvoicesAsync();
+    break;
+
+case "13":
     return;
 
         default:
@@ -180,10 +207,33 @@ case "8":
     }
 }
 
-async Task CreateInvoice(IInvoiceService invoiceService)
+async Task CreateInvoice(
+    IInvoiceService invoiceService,
+    ICustomerRepository customerRepository)
 {
-    Console.Write("Enter Customer ID: ");
-    int customerId = int.Parse(Console.ReadLine()!);
+    var customers = await customerRepository.GetAllAsync();
+
+if (!customers.Any())
+{
+    Console.WriteLine("No customers found. Please create a customer first.");
+    return;
+}
+
+Console.WriteLine("Select Customer:");
+
+foreach (var customer in customers)
+{
+    Console.WriteLine($"{customer.CustomerId}. {customer.Name}");
+}
+
+Console.Write("Enter Customer ID: ");
+int customerId = int.Parse(Console.ReadLine()!);
+
+if (!customers.Any(c => c.CustomerId == customerId))
+{
+    Console.WriteLine("Invalid Customer ID.");
+    return;
+}
 
     Console.Write("Enter Due Days (e.g. 30): ");
     int dueDays = int.Parse(Console.ReadLine()!);
@@ -327,4 +377,31 @@ async Task ChangeStatus(IInvoiceService invoiceService)
     {
         Console.WriteLine($"Error: {ex.Message}");
     }
+}
+
+async Task CreateCustomer(ICustomerRepository customerRepo)
+{
+    Console.Write("Enter Customer Name: ");
+    string name = Console.ReadLine()!;
+
+    Console.Write("Enter Email: ");
+    string email = Console.ReadLine()!;
+
+    Console.Write("Enter Phone: ");
+    string phone = Console.ReadLine()!;
+
+    Console.Write("Enter Address: ");
+    string address = Console.ReadLine()!;
+
+    var customer = new Customer
+    {
+        Name = name,
+        Email = email,
+        Phone = phone,
+        Address = address
+    };
+
+    await customerRepo.AddAsync(customer);
+
+    Console.WriteLine("Customer created successfully!");
 }

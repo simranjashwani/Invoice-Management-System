@@ -13,3 +13,4 @@ C:\Users\91942\Desktop\InvoiceManagementSystem\InvoiceManagementSystem.BLL\obj\D
 C:\Users\91942\Desktop\InvoiceManagementSystem\InvoiceManagementSystem.BLL\obj\Debug\net8.0\refint\InvoiceManagementSystem.BLL.dll
 C:\Users\91942\Desktop\InvoiceManagementSystem\InvoiceManagementSystem.BLL\obj\Debug\net8.0\InvoiceManagementSystem.BLL.pdb
 C:\Users\91942\Desktop\InvoiceManagementSystem\InvoiceManagementSystem.BLL\obj\Debug\net8.0\ref\InvoiceManagementSystem.BLL.dll
+C:\Users\91942\Desktop\InvoiceManagementSystem\InvoiceManagementSystem.BLL\obj\Debug\net8.0\InvoiceManagementSystem.BLL.sourcelink.json

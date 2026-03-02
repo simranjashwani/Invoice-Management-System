@@ -1,6 +1,6 @@
 namespace InvoiceManagementSystem.DAL.Enums
 {
-    public enum InvoiceStatus
+    public enum InvoiceStatus                           
     {
         Draft = 0,
         Sent = 1,

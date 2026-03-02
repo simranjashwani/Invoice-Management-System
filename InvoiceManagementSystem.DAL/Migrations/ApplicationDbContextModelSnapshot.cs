@@ -22,6 +22,35 @@ namespace InvoiceManagementSystem.DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("InvoiceManagementSystem.DAL.Entities.Customer", b =>
+                {
+                    b.Property<int>("CustomerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CustomerId");
+
+                    b.ToTable("Customers");
+                });
+
             modelBuilder.Entity("InvoiceManagementSystem.DAL.Entities.Invoice", b =>
                 {
                     b.Property<int>("InvoiceId")
@@ -69,6 +98,8 @@ namespace InvoiceManagementSystem.DAL.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("InvoiceId");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("InvoiceNumber")
                         .IsUnique();
@@ -169,6 +200,17 @@ namespace InvoiceManagementSystem.DAL.Migrations
                     b.ToTable("PaymentMethods");
                 });
 
+            modelBuilder.Entity("InvoiceManagementSystem.DAL.Entities.Invoice", b =>
+                {
+                    b.HasOne("InvoiceManagementSystem.DAL.Entities.Customer", "Customer")
+                        .WithMany("Invoices")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("InvoiceManagementSystem.DAL.Entities.InvoiceLineItem", b =>
                 {
                     b.HasOne("InvoiceManagementSystem.DAL.Entities.Invoice", "Invoice")
@@ -189,6 +231,11 @@ namespace InvoiceManagementSystem.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Invoice");
+                });
+
+            modelBuilder.Entity("InvoiceManagementSystem.DAL.Entities.Customer", b =>
+                {
+                    b.Navigation("Invoices");
                 });
 
             modelBuilder.Entity("InvoiceManagementSystem.DAL.Entities.Invoice", b =>

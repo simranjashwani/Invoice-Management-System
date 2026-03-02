@@ -20,6 +20,12 @@ namespace InvoiceManagementSystem.BLL.Interfaces
         Task UpdateOverdueInvoicesAsync();
 
         Task CalculateDsoAsync();
+
+
+        Task GenerateRevenueSummaryAsync();     //Revenue Summary Report
+Task GenerateCustomerOutstandingReportAsync();  // Outstanding per Customer Report
+Task GenerateReconciliationReportAsync();   // Financial Reconciliation Report
+Task GenerateTopUnpaidInvoicesAsync();  // Top Unpaid Invoices Report
     }
 }
 

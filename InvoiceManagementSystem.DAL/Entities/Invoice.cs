@@ -10,7 +10,13 @@ namespace InvoiceManagementSystem.DAL.Entities
 
         public string InvoiceNumber { get; set; } = string.Empty;
 
-        public int CustomerId { get; set; }   // FK (from Customer module)
+        //public int CustomerId { get; set; }   // FK (from Customer module)
+        
+        // Foreign Key
+        public int CustomerId { get; set; }
+
+// Navigation Property
+        public Customer Customer { get; set; } = null!;
 
         public int? QuoteId { get; set; }     // Optional FK (from Quotation module)
 

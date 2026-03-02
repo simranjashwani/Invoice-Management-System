@@ -18,6 +18,8 @@ namespace InvoiceManagementSystem.DAL.Data
 
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
 
+        public DbSet<Customer> Customers { get; set; }
+
        protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
     base.OnModelCreating(modelBuilder);
@@ -27,6 +29,13 @@ namespace InvoiceManagementSystem.DAL.Data
     modelBuilder.Entity<InvoiceLineItem>().HasKey(li => li.LineItemId);
     modelBuilder.Entity<Payment>().HasKey(p => p.PaymentId);
     modelBuilder.Entity<PaymentMethod>().HasKey(pm => pm.MethodId);
+
+
+    modelBuilder.Entity<Invoice>()
+    .HasOne(i => i.Customer)
+    .WithMany(c => c.Invoices)
+    .HasForeignKey(i => i.CustomerId)
+    .OnDelete(DeleteBehavior.Restrict);
 
     // Configure Decimal Precision
 modelBuilder.Entity<Invoice>()

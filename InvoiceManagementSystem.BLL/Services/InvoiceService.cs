@@ -251,5 +251,89 @@ public async Task<Invoice> CreateInvoiceAsync(Invoice invoice)
 
     await _invoiceRepository.UpdateAsync(invoice);
 }
+
+
+public async Task GenerateRevenueSummaryAsync()
+{
+    var invoices = await _invoiceRepository.GetAllAsync();
+
+    decimal totalRevenue = invoices.Sum(i => i.GrandTotal);
+    decimal totalCollected = invoices.Sum(i => i.Payments.Sum(p => p.PaymentAmount));
+    decimal totalOutstanding = totalRevenue - totalCollected;
+
+    Console.WriteLine("\n===== REVENUE SUMMARY =====");
+    Console.WriteLine($"Total Revenue: {totalRevenue}");
+    Console.WriteLine($"Total Collected: {totalCollected}");
+    Console.WriteLine($"Total Outstanding: {totalOutstanding}");
+}
+
+
+public async Task GenerateCustomerOutstandingReportAsync()
+{
+    var invoices = await _invoiceRepository.GetAllAsync();
+
+    var report = invoices
+        .GroupBy(i => i.Customer.Name)
+        .Select(g => new
+        {
+            CustomerName = g.Key,
+            Outstanding = g.Sum(i => i.GrandTotal - i.Payments.Sum(p => p.PaymentAmount))
+        });
+
+    Console.WriteLine("\n===== OUTSTANDING PER CUSTOMER =====");
+
+    foreach (var item in report)
+    {
+        Console.WriteLine($"{item.CustomerName} → {item.Outstanding}");
+    }
+}
+
+public async Task GenerateReconciliationReportAsync()
+{
+    var invoices = await _invoiceRepository.GetAllAsync();
+
+    Console.WriteLine("\n===== RECONCILIATION REPORT =====");
+
+    foreach (var invoice in invoices)
+    {
+        decimal paid = invoice.Payments.Sum(p => p.PaymentAmount);
+        decimal outstanding = invoice.GrandTotal - paid;
+
+        string status = outstanding == 0 ? "Reconciled" :
+                        outstanding > 0 ? "Pending" :
+                        "Error";
+
+        Console.WriteLine($"Invoice: {invoice.InvoiceNumber}");
+        Console.WriteLine($"Total: {invoice.GrandTotal}");
+        Console.WriteLine($"Paid: {paid}");
+        Console.WriteLine($"Outstanding: {outstanding}");
+        Console.WriteLine($"Status: {status}");
+        Console.WriteLine("---------------------------");
+    }
+}
+
+
+public async Task GenerateTopUnpaidInvoicesAsync()
+{
+    var invoices = await _invoiceRepository.GetAllAsync();
+
+    var topUnpaid = invoices
+        .Select(i => new
+        {
+            i.InvoiceNumber,
+            Outstanding = i.GrandTotal - i.Payments.Sum(p => p.PaymentAmount)
+        })
+        .Where(x => x.Outstanding > 0)
+        .OrderByDescending(x => x.Outstanding)
+        .Take(5);
+
+    Console.WriteLine("\n===== TOP 5 UNPAID INVOICES =====");
+
+    foreach (var item in topUnpaid)
+    {
+        Console.WriteLine($"{item.InvoiceNumber} → {item.Outstanding}");
+    }
+}
+
     }
 }
